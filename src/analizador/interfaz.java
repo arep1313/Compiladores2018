@@ -50,6 +50,8 @@ public class interfaz extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,12 +64,26 @@ public class interfaz extends javax.swing.JFrame {
 
         jLabel1.setText("Sentencia");
 
-        jLabel2.setText("Resultado");
+        jLabel2.setText("Archivo flex");
 
         jButton2.setText("Limpiar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Analizar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Analizar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
             }
         });
 
@@ -85,10 +101,19 @@ public class interfaz extends javax.swing.JFrame {
                     .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(495, 495, 495)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(22, 22, 22)))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextField1, jTextField2});
@@ -100,13 +125,19 @@ public class interfaz extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
+                    .addComponent(jButton1)
                     .addComponent(jButton2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jButton1))
+                    .addComponent(jButton3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(66, Short.MAX_VALUE)
+                    .addComponent(jButton4)
+                    .addGap(3, 3, 3)))
         );
 
         pack();
@@ -129,6 +160,14 @@ public class interfaz extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     /**
     * @param args the command line arguments
     */
@@ -142,15 +181,17 @@ public class interfaz extends javax.swing.JFrame {
     public void probarLexerFile() throws IOException{
         int contIDs=0;
         tokenslist = new LinkedList<identificador>();
-        File salida = new File ("salida.txt");
+        
         PrintWriter writer;
         try {
 //            //Escritor
-            writer = new PrintWriter(salida);
+            
 //            writer.print(jTextField1.getText());
 //            writer.close();
-        
-            Reader reader = new BufferedReader(new FileReader(jTextField1.getText()));
+            File entrada = new File(jTextField1.getText());
+            Reader reader = new BufferedReader(new FileReader(entrada));
+            File salida = new File (entrada.getName()+".out");
+            writer = new PrintWriter(salida);
             Lexer lexer = new Lexer (reader);
             String resultado="";
             while (true){
@@ -159,64 +200,78 @@ public class interfaz extends javax.swing.JFrame {
                     for(int i=0;i<tokenslist.size();i++){
                         System.out.println(tokenslist.get(i).nombre + "=" + tokenslist.get(i).ID);
                     }
+                    try
+                    {
+                        if(lexer.lexeme=="Error, no se han cerrado los comentarios.")
+                        {
+                            writer.println(lexer.lexeme + " Linea: " + lexer.linea());
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        
+                    }
                     jTextField2.setText(resultado);
                     writer.close();
                     return;
                 }
                 switch (token){
                     case BOOLEAN:
-                        writer.println(lexer.lexeme + "          Constant_Boolean     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          Constant_Boolean     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case OMENOS:
-                        writer.println("-            Operador Menos     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println("-            Operador Menos     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + 1));
                         break;
                     case OMULT:
-                        writer.println("*        Operador Multiplicacion    linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println("*        Operador Multiplicacion    linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + 1));
+                        break;
+                    case CDOUBLE:
+                        writer.println(lexer.lexeme + "        Constante double    linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + 1));
                         break;
                     case ODIV:
-                        writer.println("/        Operador Division     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println("/        Operador Division     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + 1));
                         break;
                     case ASIG:
-                        writer.println("=       Operador Asignacion     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println("=       Operador Asignacion     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + 1));
                         break;
                     case OPORC:
-                        writer.println(lexer.lexeme + "          Operador Porcentaje     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          Operador Porcentaje     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case MENOR:
-                        writer.println(lexer.lexeme + "          MENOR     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          MENOR     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case MENORIGUAL:
-                        writer.println(lexer.lexeme + "          MENORIGUAL     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          MENORIGUAL     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case MAYOR:
-                        writer.println(lexer.lexeme + "          MAYOR     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          MAYOR     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case MAYORIGUAL:
-                        writer.println(lexer.lexeme + "          MAYORIGUAL     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          MAYORIGUAL     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case AND:
-                        writer.println(lexer.lexeme + "          AND     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          AND     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case IGUAL:
-                        writer.println(lexer.lexeme + "          IGUAL     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          IGUAL     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case NOIGUAL:
-                        writer.println(lexer.lexeme + "          NOIGUAL     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          NOIGUAL     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case OR:
-                        writer.println(lexer.lexeme + "          OR     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          OR     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case NEGACION:
-                        writer.println(lexer.lexeme + "          NEGACION     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          NEGACION     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case FIN:
-                        writer.println(lexer.lexeme + "          FIN     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          FIN     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case COMA:
-                        writer.println(lexer.lexeme + "          COMA     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          COMA     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case PUNTO:
-                        writer.println(lexer.lexeme + "          PUNTO     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          PUNTO     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case ICORCH:
                         writer.println(lexer.lexeme + "          INICIO_CORCHETES     linea: " + lexer.linea() + "   Columna: " + lexer.column());
@@ -225,88 +280,88 @@ public class interfaz extends javax.swing.JFrame {
                         writer.println(lexer.lexeme + "          FIN_CORCHETES     linea: " + lexer.linea() + "   Columna: " + lexer.column());
                         break;
                     case IPAR:
-                        writer.println(lexer.lexeme + "          INCIO_PARENTESIS     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          INCIO_PARENTESIS     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case FPAR:
-                        writer.println(lexer.lexeme + "          FIN_PARENTESIS     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          FIN_PARENTESIS     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case ICORCH2:
-                        writer.println(lexer.lexeme + "          INICIO_CORCHETES     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          INICIO_CORCHETES     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case FCORCH2:
-                        writer.println(lexer.lexeme + "          FIN_CORCHETES     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          FIN_CORCHETES     linea: " + lexer.linea() + "   Columna: " + lexer.column() + " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case CORCHETESC:
-                        writer.println(lexer.lexeme + "          T_BRACKETS     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_BRACKETS     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case PARENTESIS:
-                        writer.println(lexer.lexeme + "          T_PARENTESIS     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_PARENTESIS     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case CORCHETES:
-                        writer.println(lexer.lexeme + "          T_CORCHETES     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_CORCHETES     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case ENTERO:
-                        writer.println(lexer.lexeme + "          ENTERO     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          ENTERO     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case HEXADECIMAL:
-                        writer.println(lexer.lexeme + "          T_HEXADECIMAL     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_HEXADECIMAL     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case VOID:
-                        writer.println(lexer.lexeme + "          T_VOID     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_VOID     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case DOUBLE:
-                        writer.println(lexer.lexeme + "          T_DOUBLE     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_DOUBLE     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case BOOL:
-                        writer.println(lexer.lexeme + "          T_BOOL     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_BOOL     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case STRING:
-                        writer.println(lexer.lexeme + "          T_STRING     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_STRING     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case CLASS:
-                        writer.println(lexer.lexeme + "          T_CLASS     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_CLASS     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case INTERFACE:
-                        writer.println(lexer.lexeme + "          T_INTERFACE     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_INTERFACE     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case NULL:
-                        writer.println(lexer.lexeme + "          T_NULL     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_NULL     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case THIS:
-                        writer.println(lexer.lexeme + "          T_THIS     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_THIS     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case EXTENDS:
-                        writer.println(lexer.lexeme + "          T_EXTENDS     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_EXTENDS     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case IMPLEMENTS:
-                        writer.println(lexer.lexeme + "          T_IMPLEMENTS     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_IMPLEMENTS     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case FOR:
-                        writer.println(lexer.lexeme + "          T_FOR     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_FOR     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case WHILE:
-                        writer.println(lexer.lexeme + "          T_WHILE     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_WHILE     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case IF:
-                        writer.println(lexer.lexeme + "          T_IF     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_IF     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case ELSE:
-                        writer.println(lexer.lexeme + "          T_ELSE     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_ELSE     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case RETURN:
-                        writer.println(lexer.lexeme + "          T_RETURN     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_RETURN     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case BREAK:
-                        writer.println(lexer.lexeme + "          T_BREAK     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_BREAK     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case NEW:
-                        writer.println(lexer.lexeme + "          T_NEW     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_NEW     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case NEWA:
-                        writer.println(lexer.lexeme + "          T_NEWA     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          T_NEWA     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case CADENA:
-                        writer.println(lexer.lexeme + "          Cadena     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme + "          Cadena     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case ERROR:
                         writer.println("Error, simbolo no reconocido ");
@@ -317,14 +372,14 @@ public class interfaz extends javax.swing.JFrame {
                         tokenitem.nombre=lexer.lexeme;
                         tokenitem.ID=contIDs;
                         tokenslist.add(tokenitem);
-                        writer.println(lexer.lexeme + "ID");
+                        writer.println(lexer.lexeme + "          ID     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     }
                     case COMENTARIO:
-                        writer.println("Comentario       Linea: " + lexer.linea() + "   Columna:  " + lexer.column());
+                        //writer.println("Comentario       Linea: " + lexer.linea() + "   Columna:  " + lexer.column());
                         break;
                     case INT:
-                        writer.println(lexer.lexeme +"      Entero     linea: " + lexer.linea() + "   Columna: " + lexer.column());
+                        writer.println(lexer.lexeme +"      Entero     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     default:
                         writer.println(lexer.lexeme + " default");
@@ -335,7 +390,9 @@ public class interfaz extends javax.swing.JFrame {
         catch (FileNotFoundException ex) {
             Logger.getLogger(interfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
  }
+
 //    public void tablaResultado(){
 //        Object[][] matriz = new Object [tokenslist.size()][2];
 //        for(int i =0; i<tokenslist.size();i++){
@@ -351,6 +408,8 @@ public class interfaz extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField jTextField1;

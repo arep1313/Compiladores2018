@@ -17,8 +17,10 @@ WHITE = [ \t\n\r]
 
 ENTER = ("\n")
 HEXADECIMAL = (0("X"|"x")[0-9a-fA-F]+)
-COMENTARIO = ("//"[^\n]*) | ("/*".*"*/")
+COMENTARIO = ("//"[^\n]*) | "/*" ~"*/"
+ERRORC = "/*"[^"*/"]*
 CADENA = ("\""[^\n]*"\"")
+CDOUBLE = {DIGITO}+("."){DIGITO}*([E|e]("+"))?{DIGITO}*
 
 BOOLEAN =("true")|("false")
 VOID = ("void")
@@ -47,36 +49,37 @@ public String lexeme;
 %%
 {WHITE} {/*Ignore*/}
 {COMENTARIO} {return COMENTARIO;}
-"+" {return OMAS;}
-"-" {return OMENOS;}
-"*" {return OMULT;}
-"/" {return ODIV;}
-"%" {return OPORC;}
-"<" {return MENOR;}
-"<=" {return MENORIGUAL;}
-">" {return MAYOR;}
-">=" {return MAYORIGUAL;}
-"=" {return ASIG;}
-"==" {return IGUAL;}
-"!=" {return NOIGUAL;}
-"&&" {return AND;}
-"||" {return OR;}
-"!" {return NEGACION;}
-";" {return FIN;}
-"," {return COMA;}
-"." {return PUNTO;}
-"[" {return ICORCH;}
-"]" {return FCORCH;}
-"(" {return IPAR;}
-")" {return FPAR;}
-"{" {return ICORCH2;}
-"}" {return FCORCH2;}
-"[]" {return CORCHETESC;}
-"()" {return PARENTESIS;}
-"{}" {return CORCHETES;}
+"+" {lexeme=yytext();return OMAS;}
+"-" {lexeme=yytext();return OMENOS;}
+"*" {lexeme=yytext();return OMULT;}
+"/" {lexeme=yytext();return ODIV;}
+"%" {lexeme=yytext();return OPORC;}
+"<" {lexeme=yytext();return MENOR;}
+"<=" {lexeme=yytext();return MENORIGUAL;}
+">" {lexeme=yytext();return MAYOR;}
+">=" {lexeme=yytext();return MAYORIGUAL;}
+"=" {lexeme=yytext();return ASIG;}
+"==" {lexeme=yytext();return IGUAL;}
+"!=" {lexeme=yytext();return NOIGUAL;}
+"&&" {lexeme=yytext();return AND;}
+"||" {lexeme=yytext();return OR;}
+"!" {lexeme=yytext();return NEGACION;}
+";" {lexeme=yytext();return FIN;}
+"," {lexeme=yytext();return COMA;}
+"[]" {lexeme=yytext();return CORCHETESC;}
+"()" {lexeme=yytext();return PARENTESIS;}
+"{}" {lexeme=yytext();return CORCHETES;}
+"." {lexeme=yytext();return PUNTO;}
+"[" {lexeme=yytext();return ICORCH;}
+"]" {lexeme=yytext();return FCORCH;}
+"(" {lexeme=yytext();return IPAR;}
+")" {lexeme=yytext();return FPAR;}
+"{" {lexeme=yytext();return ICORCH2;}
+"}" {lexeme=yytext();return FCORCH2;}
 
 
 {ENTERO} {lexeme=yytext(); return ENTERO;}
+{CDOUBLE} {lexeme=yytext(); return CDOUBLE;}
 {HEXADECIMAL} {lexeme=yytext(); return HEXADECIMAL;}
 {BOOLEAN} {lexeme=yytext(); return BOOLEAN;}
 {VOID} {lexeme=yytext(); return VOID;}
@@ -98,6 +101,7 @@ public String lexeme;
 {BREAK} {lexeme=yytext(); return BREAK;}
 {NEW} {lexeme=yytext(); return NEW;}
 {NEWA} {lexeme=yytext(); return NEWA;}
+{ERRORC} {lexeme="Error, no se han cerrado los comentarios."; return null;}
 {CADENA} {lexeme=yytext(); return CADENA;}
 {LETRA}({LETRA}|{DIGITO})* {lexeme=yytext(); return ID;}
 
