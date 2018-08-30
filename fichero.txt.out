@@ -1,42 +1,8 @@
-Error, simbolo no reconocido 
-void          T_VOID     linea: 0   Columna: 1 hasta: 5
-void          T_VOID     linea: 1   Columna: 4 hasta: 8
-void          T_VOID     linea: 1   Columna: 9 hasta: 13
-string          T_STRING     linea: 1   Columna: 14 hasta: 20
-NewArray          T_NEWA     linea: 1   Columna: 21 hasta: 29
-.          PUNTO     linea: 2   Columna: 0 hasta: 1
-12.12        Constante double    linea: 2   Columna: 1 hasta: 2
-int      Entero     linea: 3   Columna: 0 hasta: 3
-string          T_STRING     linea: 4   Columna: 0 hasta: 6
-class          T_CLASS     linea: 5   Columna: 0 hasta: 5
-bool          T_BOOL     linea: 5   Columna: 6 hasta: 10
-0X23abcdf          T_HEXADECIMAL     linea: 6   Columna: 0 hasta: 9
-23          ENTERO     linea: 6   Columna: 10 hasta: 12
-New          T_NEW     linea: 6   Columna: 13 hasta: 16
-if          T_IF     linea: 7   Columna: 0 hasta: 2
-this          T_THIS     linea: 7   Columna: 3 hasta: 7
-extends          T_EXTENDS     linea: 8   Columna: 0 hasta: 7
-implements          T_IMPLEMENTS     linea: 9   Columna: 0 hasta: 10
-bool          T_BOOL     linea: 10   Columna: 0 hasta: 4
-hola_45          ID     linea: 11   Columna: 0 hasta: 7
-qwertyuiopasdfghjklzxcvbnmnbvcxzaswq          ID     linea: 12   Columna: 0 hasta: 36
-holaestoesidentificador          ID     linea: 16   Columna: 0 hasta: 23
-"hola"          Cadena     linea: 17   Columna: 0 hasta: 6
-[]          T_BRACKETS     linea: 19   Columna: 0 hasta: 2
-(          INCIO_PARENTESIS     linea: 23   Columna: 0 hasta: 1
-)          FIN_PARENTESIS     linea: 23   Columna: 2 hasta: 3
-()          T_PARENTESIS     linea: 23   Columna: 4 hasta: 6
-[          INICIO_CORCHETES     linea: 23   Columna: 7
-]          FIN_CORCHETES     linea: 23   Columna: 9
-%          Operador Porcentaje     linea: 23   Columna: 11 hasta: 12
-Error, simbolo no reconocido 
-!=          NOIGUAL     linea: 24   Columna: 0 hasta: 2
-==          IGUAL     linea: 25   Columna: 0 hasta: 2
-<=          MENORIGUAL     linea: 26   Columna: 0 hasta: 2
-.          PUNTO     linea: 27   Columna: 0 hasta: 1
-12          ENTERO     linea: 27   Columna: 1 hasta: 3
-E          ID     linea: 27   Columna: 3 hasta: 4
-+ default
-2          ENTERO     linea: 27   Columna: 5 hasta: 6
-12.e+69        Constante double    linea: 28   Columna: 0 hasta: 1
-fdsafdsa          ID     linea: 39   Columna: 0 hasta: 8
+()          T_PARENTESIS     linea: 1   Columna: 0 hasta: 2
+(          INCIO_PARENTESIS     linea: 2   Columna: 0 hasta: 1
+)          FIN_PARENTESIS     linea: 3   Columna: 0 hasta: 1
+"true"          Cadena     linea: 4   Columna: 0 hasta: 6
+true          Constant_Boolean     linea: 4   Columna: 7 hasta: 11
+true          Constant_Boolean     linea: 4   Columna: 12 hasta: 16
+false_          ID     linea: 4   Columna: 17 hasta: 23
+12.E12        Constante double    linea: 5   Columna: 0 hasta: 1

@@ -18,8 +18,8 @@ public class Main {
      */
     public static void main(String[] args) {
         //String path = "C:\\Users\\betic\\Documents\\URL\\8vo Ciclo\\Compiladores\\analizadorLexico2-Java\\src\\analizador\\Lexer.flex";
-        String path = "C:\\Users\\betic\\Documents\\URL\\8vo Ciclo\\Compiladores\\analizadorLexico2-Java\\src\\analizador\\minicsharp.flex";
-        generarLexer(path);
+        //String path = "C:\\Users\\betic\\Documents\\URL\\8vo Ciclo\\Compiladores\\analizadorLexico2-Java\\src\\analizador\\minicsharp.flex";
+        //generarLexer(path);
     
     }
     public static void generarLexer(String path){
