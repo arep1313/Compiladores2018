@@ -1,5 +1,6 @@
-//HOLAAAAAAAA 
-true true true false
-/*hola  
-     hhh*/
-false
+//HOLAAAAAAAA
+()
+(
+)
+"true" true true false
+12.E+12
