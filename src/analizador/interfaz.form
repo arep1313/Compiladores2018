@@ -52,7 +52,7 @@
                       <Component id="jButton2" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="102" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -90,15 +90,15 @@
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextField1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Direcci&#xf3;n del archivo aqu&#xed;"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextField2">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Con este archivo se generara la clase lexer, pero para poderla usar se debe volver a generar el programa"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Sentencia"/>
+        <Property name="text" type="java.lang.String" value="Archivo minic"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">

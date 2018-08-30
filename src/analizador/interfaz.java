@@ -64,9 +64,9 @@ public class interfaz extends javax.swing.JFrame {
             }
         });
 
-        jTextField2.setText("Con este archivo se generara la clase lexer, pero para poderla usar se debe volver a generar el programa");
+        jTextField1.setText("Dirección del archivo aquí");
 
-        jLabel1.setText("Sentencia");
+        jLabel1.setText("Archivo minic");
 
         jLabel2.setText("Archivo flex");
 
@@ -124,7 +124,7 @@ public class interfaz extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(309, 309, 309)
                         .addComponent(jButton2)))
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextField1, jTextField2});
@@ -221,7 +221,7 @@ public class interfaz extends javax.swing.JFrame {
 //            writer.close();
             File entrada = new File(jTextField1.getText());
             Reader reader = new BufferedReader(new FileReader(entrada));
-            File salida = new File (entrada.getName()+".out");
+            File salida = new File (entrada.getName().split("\\.")[0]+".out");
             writer = new PrintWriter(salida);
             Lexer lexer = new Lexer (reader);
             String resultado="";
@@ -249,6 +249,9 @@ public class interfaz extends javax.swing.JFrame {
                 switch (token){
                     case BOOLEAN:
                         writer.println(lexer.lexeme + "          Constant_Boolean     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
+                        break;
+                    case OMAS:
+                        writer.println("+            Operador Menos     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + 1));
                         break;
                     case OMENOS:
                         writer.println("-            Operador Menos     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + 1));
@@ -398,12 +401,19 @@ public class interfaz extends javax.swing.JFrame {
                         writer.println("*** Error linea " + lexer.linea() + ".*** Caracter irreconocido: '" + lexer.lexeme + "'");
                         break;
                     case ID: {
-                        contIDs++;
-                        identificador tokenitem=new identificador();
-                        tokenitem.nombre=lexer.lexeme;
-                        tokenitem.ID=contIDs;
-                        tokenslist.add(tokenitem);
-                        writer.println(lexer.lexeme + "          ID     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
+//                        contIDs++;
+//                        identificador tokenitem=new identificador();
+//                        tokenitem.nombre=lexer.lexeme;
+//                        tokenitem.ID=contIDs;
+//                        tokenslist.add(tokenitem);
+                        if(lexer.lexeme.length()<31)
+                        {
+                            writer.println(lexer.lexeme + "          ID     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
+                        }
+                        else
+                        {
+                            writer.println(lexer.lexeme.substring(0,31) + "          ID Truncado. Su tamaño era mayor a 31 caracteres.    linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + 31));
+                        }
                         break;
                     }
                     case COMENTARIO:
