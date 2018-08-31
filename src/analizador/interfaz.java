@@ -260,7 +260,7 @@ public class interfaz extends javax.swing.JFrame {
                         writer.println("*        Operador Multiplicacion    linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + 1));
                         break;
                     case CDOUBLE:
-                        writer.println(lexer.lexeme + "        Constante double    linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + 1));
+                        writer.println(lexer.lexeme + "        Constante double    linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + lexer.lexeme.length()));
                         break;
                     case ODIV:
                         writer.println("/        Operador Division     linea: " + lexer.linea() + "   Columna: " + lexer.column()+ " hasta: " + (lexer.column() + 1));

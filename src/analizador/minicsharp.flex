@@ -20,7 +20,7 @@ HEXADECIMAL = (0("X"|"x")[0-9a-fA-F]+)
 COMENTARIO = ("//"[^\n]*) | "/*" ~"*/"
 ERRORC = "/*"[^"*/"]*
 CADENA = ("\""[^\n]*"\"")
-CDOUBLE = {DIGITO}+("."){DIGITO}*([E|e]("+")?)?{DIGITO}*
+CDOUBLE = {DIGITO}+("."){DIGITO}*(([E|e]("+"|"-")?)?{DIGITO}+)*
 
 BOOLEAN =("true")|("false")
 VOID = ("void")
@@ -77,9 +77,8 @@ public String lexeme;
 "{" {lexeme=yytext();return ICORCH2;}
 "}" {lexeme=yytext();return FCORCH2;}
 
-
-{ENTERO} {lexeme=yytext(); return ENTERO;}
 {CDOUBLE} {lexeme=yytext(); return CDOUBLE;}
+{ENTERO} {lexeme=yytext(); return ENTERO;}
 {HEXADECIMAL} {lexeme=yytext(); return HEXADECIMAL;}
 {BOOLEAN} {lexeme=yytext(); return BOOLEAN;}
 {VOID} {lexeme=yytext(); return VOID;}
