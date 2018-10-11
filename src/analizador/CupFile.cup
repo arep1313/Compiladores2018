@@ -1,0 +1,103 @@
+package analizador;
+
+import java.util.*;
+import java.io.*;
+import java_cup.runtime.*;
+
+parser code
+  {:
+  private Lexer lexer;
+  private File file;
+
+  public parser( File file ) {
+     this();
+        this.file = file;
+        try {
+               lexer = new Lexer( new FileReader( file ) );
+               }
+        catch ( IOException exception )
+            {
+            throw new Error( "Unable to open file \"" + file + "\"" );
+            }
+        }
+  :};
+scan with  {:  return  lexer.yylex();  :};
+
+terminal IDENT, ENTERO, CDOUBLE, BOOLEAN, CADENA, VOID, CORCHETESC, CLASS, EXTENDS, IMPLEMENTS,
+         INTERFACE, IF, ELSE, WHILE, FOR, RETURN, BREAK, PRINT, NULL, THIS, NEW,
+         NEWA, MALLOC, GETBYTE, SETBYTE, INT, BOOL, DOUBLE, STRING ;
+terminal COMA, ICORCH2, FCORCH2, FIN, IPAR, FPAR, OMAS, OMENOS, OMULT,OMENOSN, OPORC, ODIV, MENOR, MENORIGUAL,
+         MAYOR, MAYORIGUAL, ASIG, IGUAL, NOIGUAL, AND, ANDAND, OR, NEGACION, PARENTESIS, PUNTO,
+         ICORCH, FCORCH, READINTEGER, READLINE, HEXADECIMAL, CORCHETES;
+
+nonterminal Program, Decl, Decl2, VariableDecl, Variable, Type ;
+nonterminal FunctionDecl, Formals, Variable2, ClassDecl,ExId,ImId,ImID2 ;
+nonterminal Field, InterfaceDecl, Prototype2, Prototype, StmtBlock, VariableDecl2 ;
+nonterminal Stmt2, Stmt, Expr2, Field2, IfStmt, ELSt, WhileStmt ;
+nonterminal ForStmt, ReturnStmt,BreakStmt, PrintStmt,Expr5, Expr3, Expr ;
+nonterminal LValue, LibCall, Actuals, Constant,Call ;
+
+precedence left COMA, FIN, PUNTO ;
+precedence left OMENOSN ;
+precedence left OMAS, OMENOS ;
+precedence left OMULT, ODIV, OPORC ;
+precedence left MENOR, MENORIGUAL, MAYOR, MAYORIGUAL, ASIG, NOIGUAL, IGUAL, NEGACION ;
+precedence left AND,ANDAND, OR ;
+precedence left FCORCH2, ICORCH2, ICORCH, FCORCH, IPAR, FPAR ;
+precedence left IF,ELSE,WHILE,FOR ;
+precedence left RETURN, BREAK, PRINT, NULL;
+precedence left IDENT ;
+
+start with Program ;
+
+Program::=  Decl2 ;
+Decl2::=Decl Decl2 | Decl ;
+Decl::= VariableDecl | FunctionDecl | ClassDecl | InterfaceDecl ;
+VariableDecl::= Variable FIN ;
+Variable::= Type IDENT ;
+Type::= INT | DOUBLE | BOOL | STRING | IDENT |  Type CORCHETESC ;
+FunctionDecl::= Type IDENT IPAR Formals FPAR StmtBlock | VOID IDENT IPAR Formals FPAR StmtBlock ;
+Formals::= Variable2 COMA 
+            | /*Epsilon*/ ;
+Variable2::= Variable Variable2 | Variable ;
+ClassDecl::= CLASS IDENT ExId ImId ICORCH2 Field2 FCORCH2 ;
+Field2::= Field Field2 
+            | /*Epislon*/ ;
+ExId::= EXTENDS IDENT ;
+ImId::= IMPLEMENTS IDENT ImID2 COMA;
+ImID2::= IMPLEMENTS IDENT ImID2 
+            | /*Epsilon*/ ;
+Field::= VariableDecl | FunctionDecl ;
+InterfaceDecl::= INTERFACE IDENT ICORCH2 Prototype2 FCORCH2 ;
+Prototype2::= Prototype Prototype2 
+            | /*Epsilon*/ ;
+Prototype::= Type IDENT IPAR Formals FPAR FIN | VOID IDENT IPAR Formals FPAR FIN ;
+StmtBlock::= ICORCH2 VariableDecl2 Stmt2 FCORCH2 ;
+VariableDecl2::= VariableDecl VariableDecl2 
+            | /*Epsilon*/ ;
+Stmt2::= Stmt Stmt2 | /*Epsilon*/ ;
+Stmt::= Expr2 FIN | IfStmt | WhileStmt | ForStmt | BreakStmt | ReturnStmt | PrintStmt | StmtBlock ;
+Expr2::= Expr 
+            | /*Epsilon*/ ;
+IfStmt::= IF IPAR Expr FPAR Stmt ELSt ;
+ELSt::= ELSE Stmt 
+            | /*Epsilon*/ ;
+WhileStmt::= WHILE IPAR Expr2 FPAR Stmt ;
+ForStmt::= FOR IPAR Expr2 FIN Expr FIN Expr2 FPAR Stmt ;
+ReturnStmt::= RETURN Expr2 FIN ;
+BreakStmt::= BREAK FIN ;
+PrintStmt::= PRINT IPAR Expr3 FPAR FIN ;
+Expr3::= Expr Expr3 | Expr ;
+Expr::= LValue ASIG Expr | Constant | LValue | THIS | Call | IPAR Expr2 FPAR |
+        Expr OMAS Expr | Expr OMENOS Expr | Expr OMULT Expr | Expr ODIV Expr |
+        Expr OPORC  Expr | OMENOSN Expr | Expr MENOR Expr | Expr MENORIGUAL Expr |
+        Expr MAYOR Expr | Expr MAYORIGUAL Expr | Expr IGUAL Expr | Expr NOIGUAL Expr |
+        Expr ANDAND Expr | Expr OR Expr | NEGACION Expr | NEW IPAR IDENT FPAR |
+        NEWA IPAR Expr COMA Type FPAR | READINTEGER PARENTESIS | READLINE PARENTESIS |
+        MALLOC IPAR Expr FPAR ;
+LValue::= IDENT | Expr PUNTO IDENT | Expr PUNTO ICORCH Expr FCORCH ;
+Call::= IDENT IPAR Actuals FPAR | Expr PUNTO IDENT IPAR Actuals FPAR | Expr PUNTO LibCall IPAR Actuals FPAR ;
+LibCall::= GETBYTE IPAR Expr FPAR | SETBYTE IPAR Expr COMA Expr FPAR ;
+Actuals::= Expr Expr3 COMA 
+            | /* Epsilon */ {: :} ;
+Constant::= ENTERO | CDOUBLE | BOOLEAN | CADENA | NULL ;
